@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="otica">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/backend_otica_completo.zip!/" />
+      <root url="jar://$PROJECT_DIR$/otica_api_completa.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
