@@ -1,7 +1,17 @@
-Para startar o Projeto:
-=======================
-mvn clean install
-mvn spring-boot:run
+Backend em PHP
+==============
+O projeto original em Java foi substituído por uma API PHP simples.
+Os endpoints ficam na pasta `backend/public` e utilizam PDO para conectar
+ao MySQL configurado via variáveis de ambiente.
+A estrutura completa do banco de dados está em `backend/schema.sql`.
+
+Para rodar localmente:
+```
+cp backend/config/.env.example backend/config/.env
+php -S localhost:8000 -t backend/public
+```
+
+Veja `backend/DEPLOY.md` para instruções de deploy na Hostinger.
 
 
 
@@ -62,3 +72,9 @@ Atualizar estoque
 Lançar contas a pagar/receber
 Ver faturamento ou relatórios financeiros
 Criar/editar/deletar usuários
+
+Frontend
+========
+Uma interface simples em HTML/JS foi adicionada em `frontend/` para gerenciar
+produtos e clientes. Abra `frontend/index.html` em um navegador e os dados serao
+carregados da API PHP.
