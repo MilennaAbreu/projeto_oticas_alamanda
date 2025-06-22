@@ -5,6 +5,17 @@ function showPage(pageId) {
     if (pageId === 'clientes') loadClientes();
 }
 
+document.getElementById('novo-produto').addEventListener('click', () => {
+    const form = document.getElementById('form-produto');
+    form.reset();
+    form.id.value = '';
+    showPage('produto-form');
+});
+
+document.getElementById('cancelar-produto').addEventListener('click', () => {
+    showPage('produtos');
+});
+
 document.querySelectorAll('.menu a').forEach(a => {
     a.addEventListener('click', e => {
         e.preventDefault();
@@ -17,7 +28,7 @@ document.querySelector('.toggle').addEventListener('click', () => {
 });
 
 function loadProdutos() {
-    fetch('../backend/public/produtos')
+    fetch('/api/produtos')
         .then(r => r.json())
         .then(data => {
             const tbody = document.querySelector('#lista-produtos tbody');
@@ -32,7 +43,7 @@ function loadProdutos() {
 }
 
 function loadClientes() {
-    fetch('../backend/public/clientes')
+    fetch('/api/clientes')
         .then(r => r.json())
         .then(data => {
             const tbody = document.querySelector('#lista-clientes tbody');
@@ -52,33 +63,46 @@ document.getElementById('form-produto').addEventListener('submit', e => {
     const id = form.id.value;
     const data = {
         nome: form.nome.value,
+        id_tipo: parseInt(form.id_tipo.value || 0) || null,
+        id_categoria: parseInt(form.id_categoria.value || 0) || null,
+        marca: form.marca.value,
+        codigo: form.codigo.value,
+        unidade_medida: form.unidade_medida.value,
         valor_unitario: parseFloat(form.valor_unitario.value || 0),
-        estoque_atual: parseInt(form.estoque_atual.value || 0)
+        estoque_atual: parseInt(form.estoque_atual.value || 0),
+        status: form.status.value
     };
     const method = id ? 'PUT' : 'POST';
-    const url = '../backend/public/produtos' + (id ? '/' + id : '');
+    const url = '/api/produtos' + (id ? '/' + id : '');
     fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
-    }).then(() => { form.reset(); loadProdutos(); });
+    }).then(() => { form.reset(); showPage('produtos'); loadProdutos(); });
 });
 
 document.getElementById('lista-produtos').addEventListener('click', e => {
     if (e.target.classList.contains('edit-prod')) {
         const id = e.target.dataset.id;
-        fetch('../backend/public/produtos/' + id)
+        fetch('/api/produtos/' + id)
             .then(r => r.json())
             .then(p => {
                 const form = document.getElementById('form-produto');
                 form.id.value = p.ID;
                 form.nome.value = p.NOME;
+                form.id_tipo.value = p.ID_TIPO || '';
+                form.id_categoria.value = p.ID_CATEGORIA || '';
+                form.marca.value = p.MARCA || '';
+                form.codigo.value = p.CODIGO || '';
+                form.unidade_medida.value = p.UNIDADE_MEDIDA || 'UN';
                 form.valor_unitario.value = p.VALOR_UNITARIO;
                 form.estoque_atual.value = p.ESTOQUE_ATUAL;
+                form.status.value = p.STATUS;
+                showPage('produto-form');
             });
     } else if (e.target.classList.contains('del-prod')) {
         const id = e.target.dataset.id;
-        fetch('../backend/public/produtos/' + id, { method: 'DELETE' })
+        fetch('/api/produtos/' + id, { method: 'DELETE' })
             .then(() => loadProdutos());
     }
 });
@@ -93,7 +117,7 @@ document.getElementById('form-cliente').addEventListener('submit', e => {
         contato: form.contato.value
     };
     const method = id ? 'PUT' : 'POST';
-    const url = '../backend/public/clientes' + (id ? '/' + id : '');
+    const url = '/api/clientes' + (id ? '/' + id : '');
     fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
@@ -104,7 +128,7 @@ document.getElementById('form-cliente').addEventListener('submit', e => {
 document.getElementById('lista-clientes').addEventListener('click', e => {
     if (e.target.classList.contains('edit-cli')) {
         const id = e.target.dataset.id;
-        fetch('../backend/public/clientes/' + id)
+        fetch('/api/clientes/' + id)
             .then(r => r.json())
             .then(c => {
                 const form = document.getElementById('form-cliente');
@@ -115,7 +139,7 @@ document.getElementById('lista-clientes').addEventListener('click', e => {
             });
     } else if (e.target.classList.contains('del-cli')) {
         const id = e.target.dataset.id;
-        fetch('../backend/public/clientes/' + id, { method: 'DELETE' })
+        fetch('/api/clientes/' + id, { method: 'DELETE' })
             .then(() => loadClientes());
     }
 });

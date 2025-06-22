@@ -8,8 +8,11 @@ A estrutura completa do banco de dados está em `backend/schema.sql`.
 Para rodar localmente:
 ```
 cp backend/config/.env.example backend/config/.env
-php -S localhost:8000 -t backend/public
+php -S localhost:8000 router.php
 ```
+
+Depois, acesse `http://localhost:8000` no navegador. Usar o servidor embutido evita
+erros de CORS ao tentar abrir o `index.html` diretamente pelo sistema de arquivos.
 
 Veja `backend/DEPLOY.md` para instruções de deploy na Hostinger.
 
